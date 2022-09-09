@@ -22,7 +22,6 @@ RUN		openssl req \
 		-keyout /etc/nginx/ssl/localhost.key \
 		-out /etc/nginx/ssl/localhost.csr \
 		-subj "/C=FR/ST=ILSDEFRANCE/L=PARIS/O=42/OU=IT/CN=localhost" \
-
 		-x509 \
 		-sha256 \
 		-days 365 		

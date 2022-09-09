@@ -1,80 +1,84 @@
+#===  https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-docker-compose
+
 version: '3'
 services:
-#==== NGINX ===================================================================#
+ #==== NGINX ===================================================================#
  nginx:
-    build: requirements/nginx/
     container_name: nginx
+    build: requirements/nginx/
+    
+    image: nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - "~/Desktop/Inception/website:/var/www/html"
+      - "~/Desktop/Inception/wwww:/var/www/html"
     depends_on:
-      - wordpress
+      - wordpress #mariadb
     networks:
-      - frontend
+      - inception
     restart: always
+    #env_file: .env
 
-#==== WORDPRESS ===============================================================#
+ #==== WORDPRESS ===============================================================#
  wordpress:
-    build: requirements/wordpress/
     container_name: wordpress
+    build: requirements/wordpress/
+    
+    image: wordpress
     ports:
       - "9000:9000"
     volumes:
-      - "~/Desktop/inception/website:/var/www/html"
+      - "~/Desktop/Inception/www:/var/www/html"
     depends_on:
       - mariadb
-      - redis
+      
     networks:
-      - frontend
-      - backend
+      - inception
     restart: always
-    environment:
-      MYSQL_HOST:       ${MYSQL_HOST}
-      WP_DATABASE_NAME: ${WP_DATABASE_NAME}
-      WP_DATABASE_USR:  ${WP_DATABASE_USR}
-      WP_DATABASE_PWD:  ${WP_DATABASE_PWD}
-      DOMAIN_NAME:      ${DOMAIN_NAME}
-      WP_TITLE:         ${WP_TITLE}
-      WP_ADMIN_USR:     ${WP_ADMIN_USR}
-      WP_ADMIN_PWD:     ${WP_ADMIN_PWD}
-      WP_ADMIN_EMAIL:   ${WP_ADMIN_EMAIL}
-      WP_USR:           ${WP_USR}
-      WP_PWD:           ${WP_PWD}
-      WP_EMAIL:         ${WP_EMAIL}
-      REDIS_HOST:       ${REDIS_HOST}
-      REDIS_PWD:        ${REDIS_PWD}
+    env_file: .env
+    #environment:
+     # MYSQL_HOST:       ${MYSQL_HOST}
+      #WP_DATABASE_NAME: ${WP_DATABASE_NAME}
+      #WP_DATABASE_USR:  ${WP_DATABASE_USR}
+      #WP_DATABASE_PWD:  ${WP_DATABASE_PWD}
+      #DOMAIN_NAME:      ${DOMAIN_NAME}
+      #WP_TITLE:         ${WP_TITLE}
+      #WP_ADMIN_USR:     ${WP_ADMIN_USR}
+      #WP_ADMIN_PWD:     ${WP_ADMIN_PWD}
+      #WP_ADMIN_EMAIL:   ${WP_ADMIN_EMAIL}
+      #WP_USR:           ${WP_USR}
+      #WP_PWD:           ${WP_PWD}
+      #WP_EMAIL:         ${WP_EMAIL}
+      #REDIS_HOST:       ${REDIS_HOST}
+      #REDIS_PWD:        ${REDIS_PWD}
 
 
-#==== MARIADB =================================================================#
+ #==== MARIADB =================================================================#
  mariadb:
     build: requirements/mariadb/
     container_name: mariadb
+
+    image: mariadb
     ports:
       - "3306:3306"
     volumes:
       - "~/Desktop/inception/mariadb:/var/lib/mysql"
     networks:
-      - backend
+      - inception
     restart: always
-    environment:
-      MYSQL_ROOT_PWD:   ${MYSQL_ROOT_PWD}
-      WP_DATABASE_NAME: ${WP_DATABASE_NAME}
-      WP_DATABASE_USR:  ${WP_DATABASE_USR}
-      WP_DATABASE_PWD:  ${WP_DATABASE_PWD}
+    env_file: .env
 
- redis:
-    build: requirements/bonus/redis
-    container_name: redis
-    ports:
-      - "6379:6379"
-    networks:
-      - backend
-    restart: always
-    environment:
-      REDIS_PWD: ${REDIS_PWD}
+    #environment:
+     # MYSQL_ROOT_PWD:   ${MYSQL_ROOT_PWD}
+      #WP_DATABASE_NAME: ${WP_DATABASE_NAME}
+      #WP_DATABASE_USR:  ${WP_DATABASE_USR}
+      #WP_DATABASE_PWD:  ${WP_DATABASE_PWD}
+
+ 
 #============================================================================#
 networks:
-  frontend:
-  backend:      
+  inception:
+    name: inception
+    driver: bridge
+ 
