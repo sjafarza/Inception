@@ -29,7 +29,7 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - "~/Desktop/Inception/www:/var/www/html"
+      - "~/Desktop/inception/www:/var/www/html"
     depends_on:
       - mariadb
       
