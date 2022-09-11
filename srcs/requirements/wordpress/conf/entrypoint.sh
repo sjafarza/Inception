@@ -1,6 +1,8 @@
 #!/bin/sh
 
 sleep 5
+#=== https://www.dreamhost.com/wordpress/guide-to-wp-cli/
+#                               raw.githubusercontent.com/${user}/${repo}/${branch}/${path}
 
 curl				-O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod				+x wp-cli.phar

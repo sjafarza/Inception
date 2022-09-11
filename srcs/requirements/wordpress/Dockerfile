@@ -42,6 +42,7 @@ COPY	conf/default.conf /etc/php7/php-fpm.d/www.conf
 #==== WORDPRESS ===============================================================#
 
 RUN		mkdir 					-p /var/www/html
+
 RUN		adduser 				-u 82 -D -S -G www-data www-data
 RUN		chmod 777 				-R /var/www/html
 RUN		chown 					-R www-data:www-data /var/www/html

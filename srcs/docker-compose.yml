@@ -18,7 +18,7 @@ services:
     networks:
       - inception
     restart: always
-    #env_file: .env
+    env_file: .env
 
  #==== WORDPRESS ===============================================================#
  wordpress:
@@ -79,6 +79,8 @@ services:
 #============================================================================#
 networks:
   inception:
-    name: inception
-    driver: bridge
+
+ # inception:
+  #  name: inception
+   # driver: bridge
  
