@@ -9,10 +9,10 @@ services:
     
     image: nginx
     ports:
-      - "80:80"
+      - "81:81"
       - "443:443"
     volumes:
-      - "~/Desktop/Inception/wwww:/var/www/html"
+      - "~/Desktop/inception/wwww:/var/www/html"
     depends_on:
       - wordpress #mariadb
     networks:
