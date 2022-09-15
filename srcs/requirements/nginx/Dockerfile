@@ -8,7 +8,7 @@ RUN		apk add nginx
 
 RUN		mkdir -p /var/www/html/
 
-COPY	conf/default.conf /etc/nginx/conf.d/default.conf
+COPY	conf/default.conf /etc/nginx/http.d/default.conf
 
 #==== OPENSSL =================================================================#
 # https://www.digicert.com/kb/ssl-support/openssl-quick-reference-guide.htm #

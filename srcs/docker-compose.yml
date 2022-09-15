@@ -5,14 +5,14 @@ services:
  #==== NGINX ===================================================================#
  nginx:
     container_name: nginx
-    build: requirements/nginx/
+    build: requirements/nginx
     
     image: nginx
     ports:
       - "81:81"
       - "443:443"
     volumes:
-      - "~/Desktop/inception/wwww:/var/www/html"
+      - www:/var/www/html
     depends_on:
       - wordpress #mariadb
     networks:
@@ -63,7 +63,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "~/Desktop/inception/mariadb:/var/lib/mysql"
+      - mariadb:/var/lib/mysql
     networks:
       - inception
     restart: always
@@ -74,13 +74,26 @@ services:
       #WP_DATABASE_NAME: ${WP_DATABASE_NAME}
       #WP_DATABASE_USR:  ${WP_DATABASE_USR}
       #WP_DATABASE_PWD:  ${WP_DATABASE_PWD}
-
+#==============================================================================#
+volumes:
+  www:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${VOLUME_WWW_PATH}
+      o: bind
+  mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${VOLUME_DB_PATH}
+      o: bind
  
 #============================================================================#
-networks:
-  inception:
-
+#networks:
  # inception:
-  #  name: inception
-   # driver: bridge
+
+ inception:
+    name: inception
+    driver: bridge
  
