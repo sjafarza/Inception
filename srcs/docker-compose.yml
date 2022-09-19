@@ -9,10 +9,10 @@ services:
     
     image: nginx
     ports:
-      - "81:81"
+      #- "81:81"
       - "443:443"
     volumes:
-      - www:/var/www/html
+      - "~/Desktop/ineption/www:/var/www/html"
     depends_on:
       - wordpress #mariadb
     networks:
@@ -37,21 +37,7 @@ services:
       - inception
     restart: always
     env_file: .env
-    #environment:
-     # MYSQL_HOST:       ${MYSQL_HOST}
-      #WP_DATABASE_NAME: ${WP_DATABASE_NAME}
-      #WP_DATABASE_USR:  ${WP_DATABASE_USR}
-      #WP_DATABASE_PWD:  ${WP_DATABASE_PWD}
-      #DOMAIN_NAME:      ${DOMAIN_NAME}
-      #WP_TITLE:         ${WP_TITLE}
-      #WP_ADMIN_USR:     ${WP_ADMIN_USR}
-      #WP_ADMIN_PWD:     ${WP_ADMIN_PWD}
-      #WP_ADMIN_EMAIL:   ${WP_ADMIN_EMAIL}
-      #WP_USR:           ${WP_USR}
-      #WP_PWD:           ${WP_PWD}
-      #WP_EMAIL:         ${WP_EMAIL}
-      #REDIS_HOST:       ${REDIS_HOST}
-      #REDIS_PWD:        ${REDIS_PWD}
+    
 
 
  #==== MARIADB =================================================================#
@@ -63,19 +49,14 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mariadb:/var/lib/mysql
+      - "~/Desktop/inception/mariadb:/var/lib/mysql"
     networks:
       - inception
     restart: always
     env_file: .env
 
-    #environment:
-     # MYSQL_ROOT_PWD:   ${MYSQL_ROOT_PWD}
-      #WP_DATABASE_NAME: ${WP_DATABASE_NAME}
-      #WP_DATABASE_USR:  ${WP_DATABASE_USR}
-      #WP_DATABASE_PWD:  ${WP_DATABASE_PWD}
 #==============================================================================#
-volumes:
+ volumes:
   www:
     driver: local
     driver_opts:
@@ -90,10 +71,10 @@ volumes:
       o: bind
  
 #============================================================================#
-#networks:
- # inception:
+networks:
+  inception:
 
- inception:
-    name: inception
-    driver: bridge
+# inception:
+#    name: inception
+#    driver: bridge
  
