@@ -19,8 +19,8 @@ RUN		mkdir -p /etc/nginx/ssl
 RUN		openssl req \
 		-newkey rsa:4096 \
 		-nodes \
-		-keyout /etc/nginx/ssl/localhost.key \
-		-out /etc/nginx/ssl/localhost.csr \
+		-keyout /etc/nginx/ssl/inception.key \
+		-out /etc/nginx/ssl/inception.cert\
 		-subj "/C=FR/ST=ILSDEFRANCE/L=PARIS/O=42/OU=IT/CN=localhost" \
 		-x509 \
 		-sha256 \
