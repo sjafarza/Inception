@@ -21,7 +21,7 @@ RUN		openssl req \
 		-nodes \
 		-keyout /etc/nginx/ssl/inception.key \
 		-out /etc/nginx/ssl/inception.cert\
-		-subj "/C=FR/ST=ILSDEFRANCE/L=PARIS/O=42/OU=IT/CN=localhost" \
+		-subj "/C=FR/ST=ILSDEFRANCE/L=PARIS/O=42/OU=inception/CN=inception" \
 		-x509 \
 		-sha256 \
 		-days 365 		
