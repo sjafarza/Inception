@@ -53,10 +53,10 @@ services:
     env_file: .env
 
 #==============================================================================#
- volumes:
+volumes:
   www:
    driver: local
-    driver_opts:
+   driver_opts:
       type: none
       device: ${VOLUME_WWW_PATH}
       o: bind
