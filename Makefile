@@ -1,28 +1,28 @@
-NAME = Inception
+#NAME = Inception
 
-all: $(NAME)
+#all: $(NAME)
 
-$(NAME):
-	mkdir -p /home/saray/data/code
-	mkdir -p /home/saray/data/data
-	docker-compose --project-directory srcs -f srcs/docker-compose.yml up --build
+#$(NAME):
+#	mkdir -p /home/saray/data/code
+#	mkdir -p /home/saray/data/data
+#	docker-compose --project-directory srcs -f srcs/docker-compose.yml up --build
 
-clean:
-	docker-compose --project-directory srcs -f srcs/docker-compose.yml down
-	docker volume rm srcs_database
-	docker volume rm srcs_website
-	sudo rm -rf /home/tmatis/data/
+#clean:
+#	docker-compose --project-directory srcs -f srcs/docker-compose.yml down
+#	docker volume rm srcs_database
+#	docker volume rm srcs_website
+#	sudo rm -rf /home/tmatis/data/
 
-re:	clean all
+#re:	clean all
 
-fclean:	clean
-
-
-setup:
-	sudo chmod 777 /var/run/docker.sock
-	echo "127.0.0.1	saray.42.fr" | sudo tee -a /etc/hosts
+#fclean:	clean
 
 
+#setup:
+#	sudo chmod 777 /var/run/docker.sock
+#	echo "127.0.0.1	saray.42.fr" | sudo tee -a /etc/hosts
+
+#############################################################################################
 
 #NAME		=	inception
 
@@ -77,15 +77,15 @@ __EOC			:=	"\033[0;0m"
 all: build
 
 build:
-	@docker compose ${FLAGS} up -d --build
+	@docker-compose --env-file srcs/.env ${FLAGS} up -d --build
 	@echo ${__GREEN}"ready"${__WHITE}" - docker services are up"${__EOC}
 
 start:
-	@docker compose ${FLAGS} start > /dev/null
+	@docker-compose ${FLAGS} start > /dev/null
 	@echo ${__GREEN}"ready"${__WHITE}" - docker services have been started"${__EOC}
 
 stop:
-	@docker compose ${FLAGS} stop > /dev/null
+	@docker-compose ${FLAGS} stop > /dev/null
 	@echo ${__RED}"stopped"${__WHITE}" - docker services have been stopped"${__EOC}
 
 status:
