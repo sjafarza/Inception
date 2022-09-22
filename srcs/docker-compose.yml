@@ -14,7 +14,21 @@ services:
     volumes:
       - "~/Desktop/ineption/www:/var/www/html"
     depends_on:
-      - wordpress #mariadb
+      - mariadb
+    networks:
+      - inception
+    restart: always
+    env_file: .env
+#==== MARIADB =================================================================#
+ mariadb:
+    build: requirements/mariadb/
+    container_name: mariadb
+
+    image: mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - "~/Desktop/inception/mariadb:/var/lib/mysql"
     networks:
       - inception
     restart: always
@@ -37,38 +51,21 @@ services:
       - inception
     restart: always
     env_file: .env
-    
-
-
- #==== MARIADB =================================================================#
- mariadb:
-    build: requirements/mariadb/
-    container_name: mariadb
-
-    image: mariadb
-    ports:
-      - "3306:3306"
-    volumes:
-      - "~/Desktop/inception/mariadb:/var/lib/mysql"
-    networks:
-      - inception
-    restart: always
-    env_file: .env
 
 #==============================================================================#
-# volumes:
-#  www:
-#    driver: local
-#    driver_opts:
-#      type: none
-#      device: ${VOLUME_WWW_PATH}
-#      o: bind
-#  mariadb:
-#    driver: local
-#    driver_opts:
-#      type: none
-#      device: ${VOLUME_DB_PATH}
-#      o: bind
+ volumes:
+  www:
+   driver: local
+    driver_opts:
+      type: none
+      device: ${VOLUME_WWW_PATH}
+      o: bind
+  mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${VOLUME_DB_PATH}
+      o: bind
  
 #============================================================================#
 networks:

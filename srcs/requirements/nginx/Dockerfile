@@ -20,7 +20,7 @@ RUN		openssl req \
 		-newkey rsa:4096 \
 		-nodes \
 		-keyout /etc/nginx/ssl/inception.key \
-		-out /etc/nginx/ssl/inception.cert\
+		-out /etc/nginx/ssl/inception.crt\
 		-subj "/C=FR/ST=ILSDEFRANCE/L=PARIS/O=42/OU=inception/CN=inception" \
 		-x509 \
 		-sha256 \
