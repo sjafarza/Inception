@@ -92,8 +92,8 @@ status:
 	@docker compose ${FLAGS} ps
 
 clean:
-	@rm -rf /home/saray/data/www/* > /dev/null
-	@rm -rf /home/saray/data/database/* > /dev/null
+	@rm -rf ~/Desktop/inception/mariadb/* > /dev/null
+	@rm -rf ~/Desktop/inception/www/* > /dev/null
 	@echo ${__BLUE}"info"${__WHITE}" - cleaned docker data"${__EOC}
 
 fclean: clean
