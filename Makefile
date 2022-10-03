@@ -77,6 +77,8 @@ __EOC			:=	"\033[0;0m"
 all: build
 
 build:
+	mkdir -p /home/saray/data/mariadb
+	mkdir -p /home/saray/data/www
 	@docker-compose --env-file srcs/.env ${FLAGS} up -d --build
 	@echo ${__GREEN}"ready"${__WHITE}" - docker services are up"${__EOC}
 
@@ -92,8 +94,8 @@ status:
 	@docker compose ${FLAGS} ps
 
 clean:
-	@rm -rf ~/Desktop/inception/mariadb/* > /dev/null
-	@rm -rf ~/Desktop/inception/www/* > /dev/null
+	@rm -rf /home/saray/data/mariadb/* > /dev/null
+	@rm -rf /home/saray/data/www/* > /dev/null
 	@echo ${__BLUE}"info"${__WHITE}" - cleaned docker data"${__EOC}
 
 fclean: clean
@@ -108,7 +110,7 @@ fclean: clean
 	@docker volume rm -f inception_database > /dev/null
 	@docker volume rm -f inception_www > /dev/null
 	@echo ${__BLUE}"info"${__WHITE}" - cleaned docker volumes(s)"${__EOC}
-	@docker network rm inception > /dev/null
+	@docker network rm inception_inception > /dev/null
 	@echo ${__BLUE}"info"${__WHITE}" - cleaned docker network(s)"${__EOC}
 
 re: stop fclean all

@@ -14,7 +14,7 @@ services:
     volumes:
       - "www:/var/www/html"
     depends_on:
-      - mariadb
+      - wordpress
     networks:
       - inception
     restart: always
@@ -25,10 +25,10 @@ services:
     container_name: mariadb
 
     image: mariadb
-    ports:
-      - "3306:3306"
+    # ports:
+    #   - "3306:3306"
     volumes:
-      - "mariadb:/var/lib/mysql"
+      - "db:/var/lib/mysql"
     networks:
       - inception
     restart: always
@@ -40,8 +40,8 @@ services:
     build: requirements/wordpress/
     
     image: wordpress
-    ports:
-      - "9000:9000"
+    # ports:
+    #   - "9000:9000"
     volumes:
       - "www:/var/www/html"
     depends_on:
@@ -55,16 +55,14 @@ services:
 #==============================================================================#
 volumes:
   www:
-   driver: local
-   driver_opts:
-      type: none
-      device: ~/Desktop/inception/www
-      o: bind
-  mariadb:
-    driver: local
     driver_opts:
       type: none
-      device: ${VOLUME_DB_PATH}
+      device: /home/saray/data/www
+      o: bind
+  db:
+    driver_opts:
+      type: none
+      device: /home/saray/data/mariadb
       o: bind
  
 #============================================================================#
