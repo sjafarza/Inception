@@ -1,10 +1,10 @@
 <?php
-	define("DB_NAME",				getenv("MARIADB_DATABASE"));
-	define("DB_USER",				getenv("MARIADB_USER"));
-	define("DB_PASSWORD",			getenv("MARIADB_PASSWORD"));
-	define("DB_HOST",				getenv("WORDPRESS_MARIADB_HOST") . ":3306");
-	define("DB_CHARSET",			getenv("MARIADB_CHARSET"));
-	define("DB_COLLATE",			getenv("MARIADB_COLLATE"));
+	define("DB_NAME", getenv("MARIADB_DATABASE"));
+	define("DB_USER", getenv("MARIADB_USER"));
+	define("DB_PASSWORD", getenv("MARIADB_PASSWORD"));
+	define("DB_HOST", getenv("WORDPRESS_MARIADB_HOST") . ":3306");
+	define("DB_CHARSET", getenv("MARIADB_CHARSET"));
+	define("DB_COLLATE", getenv("MARIADB_COLLATE"));
 
 
 #=== for generate my unique security key===  https://www.wpbeginner.com/glossary/security-keys/

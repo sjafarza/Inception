@@ -11,8 +11,12 @@ mv					-f wp-cli.phar /usr/local/bin/wp
 /usr/local/bin/wp	--info
 /usr/local/bin/wp	core download --allow-root --path="/var/www/html"
 
-rm					-f /var/www/html/wp-config.php
-cp					./wp-config.php /var/www/html/wp-config.php
+# rm					-f /var/www/html/wp-config.php
+# cp					./wp-config.php /var/www/html/wp-config.php
+
+wp core config --dbname=${MARIADB_DATABASE} --dbuser=${MARIADB_USER} --dbpass=${MARIADB_PASSWORD} --dbhost=${WORDPRESS_MARIADB_HOST} --path=/var/www/html
+wp config set WP_SITEURL 'https://saray.42.fr'
+wp config set WP_HOME 'https://saray.42.fr'
 
 /usr/local/bin/wp	core install \
 					--allow-root \
@@ -31,5 +35,8 @@ cp					./wp-config.php /var/www/html/wp-config.php
 					${WORDPRESS_EMAIL} \
 					--role=author \
 					--user_pass=${WORDPRESS_PASSWORD}
+
+chown -R www-data:www-data /var/www/html/*
+sed -i "s|listen = /run/php/php7-fpm.sock|listen = 9000|g" /etc/php7/php-fpm.conf
 
 exec	php-fpm7 -F
