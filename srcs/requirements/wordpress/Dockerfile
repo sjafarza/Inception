@@ -1,58 +1,22 @@
-FROM	alpine:3.14
+FROM alpine:3.13.2
 
-RUN		apk update
-RUN		apk upgrade
+WORKDIR /home
 
-#==== PHP_FPM =================================================================#
+COPY ./entry.sh .
 
-RUN		apk add php7 \
-				php7-fpm \
-				php7-opcache \
-				php7-mysqli \
-				php7-session \
-				php7-iconv \
-				php7-json \
-				php7-gd \
-				php7-curl \
-				php7-xml \
-				php7-common \
-				php7-imap \
-				php7-cgi \
-				php7-pdo \
-				php7-pdo_mysql \
-				php7-soap \
-				php7-xmlrpc \
-				php7-posix \
-				php7-mcrypt \
-				php7-redis \
-				php7-gettext \
-				php7-ldap \
-				php7-ctype \
-				php7-dom \
-				php7-phar \
-				php7-gd \
-				php7-zlib
+RUN apk update
 
-RUN		apk add curl wget
-RUN		apk add openrc
+RUN apk add php php7-fpm php7-mysqli php7-json php7-phar php7-iconv php7-mbstring mariadb-client
 
-RUN		rm -f /etc/php7/php-fpm.d/www.conf
-COPY	conf/default.conf /etc/php7/php-fpm.d/www.conf
+COPY ./www.conf /etc/php7/php-fpm.d/www.conf
 
-#==== WORDPRESS ===============================================================#
+RUN mkdir -p /var/www
 
-RUN		mkdir 					-p /var/www/html
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -O /usr/local/bin/wp \
+ && chmod +x /usr/local/bin/wp && wp core download --path=/var/www
 
-RUN		adduser 				-u 82 -D -S -G www-data www-data
-RUN		chmod 777 				-R /var/www/html
-RUN		chown 					-R www-data:www-data /var/www/html
+ENTRYPOINT ["sh", "/home/entry.sh"]
 
-COPY	./conf/wp-config.php	./
-# WORKDIR /var/www/html
-COPY	./conf/entrypoint.sh	./
-RUN		chmod +x 				./entrypoint.sh
-ENTRYPOINT						["./entrypoint.sh"]
+CMD ["php-fpm7", "-F"]
 
-#==============================================================================#
-EXPOSE	9000
-# CMD entrypoint.sh
+EXPOSE 9000

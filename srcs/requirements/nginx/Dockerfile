@@ -1,35 +1,19 @@
-FROM	alpine:3.14
+FROM alpine:3.13.2
 
-RUN		apk update
-RUN		apk upgrade
+RUN apk update && apk add --no-cache nginx openssl
 
-#==== NGINX ===================================================================#
-RUN		apk add nginx
+WORKDIR /home/nginx
 
-RUN		mkdir -p /var/www/html/
+RUN openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
+    -subj "/C=FR/ST=France/L=Paris/O=Dis/CN=saray.42.fr" \
+    -keyout /etc/ssl/private/saray.42.fr.key  -out  /etc/ssl/certs/saray.42.fr.crt
 
-COPY	conf/default.conf /etc/nginx/http.d/default.conf
+RUN adduser -D -g 'www' www && mkdir /www && chown -R www:www /var/lib/nginx && chown -R www:www /www && \
+	mkdir -p /run/nginx
 
-#==== OPENSSL =================================================================#
-# https://www.digicert.com/kb/ssl-support/openssl-quick-reference-guide.htm #
+COPY ./default.conf /etc/nginx/nginx.conf
 
-RUN		apk add openssl
-RUN		mkdir -p /etc/nginx/ssl
+EXPOSE 443
+CMD ["nginx", "-g", "daemon off;"]
 
-RUN		openssl req \
-		-newkey rsa:4096 \
-		-nodes \
-		-keyout /etc/nginx/ssl/inception.key \
-		-out /etc/nginx/ssl/inception.crt\
-		-subj "/C=FR/ST=ILSDEFRANCE/L=PARIS/O=42/OU=inception/CN=inception" \
-		-x509 \
-		-sha256 \
-		-days 365 		
-
-#==== OPENRC ==================================================================#
-RUN		apk add openrc
-RUN		rc-update add nginx default
-
-#==============================================================================#
-EXPOSE	443
-CMD		["nginx", "-g", "daemon off;"]
+EXPOSE 443

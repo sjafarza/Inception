@@ -1,75 +1,68 @@
-#===  https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-docker-compose
-
 version: '3'
 services:
- #==== NGINX ===================================================================#
- nginx:
-    container_name: nginx
-    build: requirements/nginx
-    
-    image: nginx
-    ports:
-      #- "81:81"
-      - "443:443"
-    volumes:
-      - "www:/var/www/html"
-    depends_on:
-      - wordpress
-    networks:
-      - inception
-    restart: always
-    env_file: .env
-#==== MARIADB =================================================================#
- mariadb:
-    build: requirements/mariadb/
-    container_name: mariadb
-
-    image: mariadb
-    # ports:
-    #   - "3306:3306"
-    volumes:
-      - "db:/var/lib/mysql"
-    networks:
-      - inception
-    restart: always
-    env_file: .env
-
- #==== WORDPRESS ===============================================================#
- wordpress:
-    container_name: wordpress
-    build: requirements/wordpress/
-    
-    image: wordpress
-    # ports:
-    #   - "9000:9000"
-    volumes:
-      - "www:/var/www/html"
-    depends_on:
-      - mariadb
-      
-    networks:
-      - inception
-    restart: always
-    env_file: .env
-
-#==============================================================================#
-volumes:
-  www:
-    driver_opts:
-      type: none
-      device: /home/saray/data/www
-      o: bind
-  db:
-    driver_opts:
-      type: none
-      device: /home/saray/data/mariadb
-      o: bind
- 
-#============================================================================#
+   #=== nginx ===================================================
+   nginx:
+     build: ./requirements/nginx
+     image: nginx:v1
+     container_name: nginx
+     depends_on:
+       - wordpress
+     ports:
+       - "443:443"
+     restart: always
+     networks:
+        - network
+     volumes:
+        - "website:/var/www"
+   #=== wordpress=============================================  
+   wordpress:
+     build: ./requirements/wordpress
+     image: wordpress:v1
+     environment:
+        - WP_ADMIN=${WP_ADMIN}
+        - WP_ADMIN_PASS=${WP_ADMIN_PASS}
+        - WP_USER=${WP_USER}
+        - WP_USER_PASS=${WP_USER_PASS}
+        - DB_NAME=${DB_NAME}
+        - DB_USER=${DB_USER}
+        - DB_PASS=${DB_PASS}
+        - ROOT_PASS=${ROOT_PASS}
+     container_name: wordpress
+     depends_on:
+        - mariadb
+     restart: always
+     networks:
+         network:
+     volumes:
+        - "website:/var/www"
+   #=== mariadb ==============================================  
+   mariadb:
+     build:
+       context: ./requirements/mariadb
+       args:
+         - DB_NAME=${DB_NAME}
+         - DB_USER=${DB_USER}
+         - DB_PASS=${DB_PASS}
+         - ROOT_PASS=${ROOT_PASS}
+     image: mariadb:v1
+     container_name: mariadb
+     restart: always
+     networks:
+         - network
+     volumes:
+        - "database:/var/lib/mysq"
+#=======================================================
 networks:
-  inception:
-
-# inception:
-#    name: inception
-#    driver: bridge
- 
+   network:
+#===============================================
+volumes:
+   website:
+     driver_opts:
+       type: "none"
+       o: "bind"
+       device: "/home/saray/data/website"
+   database:
+     driver_opts:
+       type: "none"
+       o: "bind"
+       device: "/home/saray/data/database"

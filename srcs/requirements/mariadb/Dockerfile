@@ -1,35 +1,27 @@
+FROM alpine:3.13.2
 
-FROM		alpine:3.14
+ARG DB_NAME
+ARG DB_USER
+ARG DB_PASS
+ARG ROOT_PASS
 
-RUN			apk update
-RUN			apk upgrade
+RUN apk update
 
-#==== OPENRC ==================================================================#
-RUN			apk add openrc
+RUN apk add mariadb mariadb-client
 
-#==== MARIADB =================================================================#
-RUN			apk add mariadb
-RUN			apk add mariadb-common
-RUN			apk add mariadb-client
-RUN			apk add mariadb-server-utils
+RUN mkdir /run/mysqld && chown mysql /run/mysqld
 
-RUN			rm -f	/etc/mysql/my.cnf \
-					/etc/my.cnf \
-					~/my.cnf
+RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql --auth-root-authentication-method=normal
 
-COPY		conf/default.conf /etc/mysql/my.cnf
-COPY		conf/default.conf /etc/my.cnf
-COPY		conf/default.conf ~/my.cnf
+COPY ./mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
 
-RUN			mkdir -p /run/mysqld
-RUN			mkdir -p /var/lib/mysql
+RUN mysqld -umysql &\
+    sleep 5 && \ 
+    echo "CREATE DATABASE $DB_NAME;" | mysql &&\
+    echo "CREATE USER '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';" | mysql &&\
+    echo "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';" | mysql &&\
+    echo "FLUSH PRIVILEGES;" | mysql &&\
+    echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$ROOT_PASS');" | mysql
+CMD ["mysqld", "--user=mysql"]
 
-RUN			chown -R mysql /var/lib/mysql
-RUN			chmod 777 /var/lib/mysql
-
-COPY		conf/entrypoint.sh entrypoint.sh
-RUN			chmod +x entrypoint.sh
-ENTRYPOINT	["./entrypoint.sh"]
-
-#==============================================================================#
-EXPOSE		3306
+EXPOSE 3306
